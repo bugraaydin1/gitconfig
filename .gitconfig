@@ -1,0 +1,42 @@
+[user]
+	name = Buğra Aydın
+	username = bugraaydin1
+	email = bugraaydin1@hotmail.com
+
+[alias]
+	# Shortcuts
+	co = checkout
+	st = status
+	unstage = reset HEAD --
+	last = log -1 HEAD
+	delete = branch -D
+
+	# Discard all unstaged commits
+	discard-all = reset --hard
+
+	# Undo last commit but keep changed files in stage
+	uncommit = reset --soft HEAD~1
+	untrack = rm --cache --
+
+	# Display tree-like log
+	tree = log --graph --date=relative --pretty=tformat:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%an %ad)%Creset'
+
+	# List branches
+	ls-br = branch --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(contents:subject) %(color:green)(%(committerdate:relative)) [%(authorname)]' --sort=-committerdate
+
+	# List available aliases
+  	alias = !git config --get-regexp alias | sed -re 's/alias\\.(\\S*)\\s(.*)$/\\1 = \\2/g'
+
+	# Checkout and pull updates on dev branch
+  	co-main = !git co main && git pull
+	co-dev = !git co dev && git pull
+
+	# Create a new feature-bugfix branch and checkout to it
+	co-feature = "! f(){ if git show-ref -q --heads "feature/CN-${1}"; then echo Branch exists: feature/CN-${1}! Checking out...; git co feature/CN-${1}; else git co -b feature/CN-${1};  fi }; f"
+	co-bugfix = "! f(){ if git show-ref -q --heads "bugfix/CN-${1}"; then echo Branch exists: bugfix/CN-${1}! Checking out...; git co bugfix/CN-${1}; else git co -b bugfix/CN-${1};  fi }; f"
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
